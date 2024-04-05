@@ -241,14 +241,13 @@ namespace chatbot_wathsapp.clases
             string[] textos_recibidos_srting_arr = op_arr.convierte_objeto_a_arreglo(texto_recibidos_arreglo_objeto);
             string ultimo_mensaje = textos_recibidos_srting_arr[textos_recibidos_srting_arr.Length - 1].ToLower();//ultimo mensaje lo pone en minusculas
             mandar_mensage_usuarios(manejadores, esperar, G_contactos_lista_para_mandar_informacion[5, 1], nombre_Del_que_envio_el_mensage + "\n" + ultimo_mensaje + "\n--------------------------------------------------------------------");
-            buscar_nombre_y_dar_click(manejadores, esperar, nombre_Del_que_envio_el_mensage);//regresar al usuario
+            
 
             string[] lineas_del_mensaje = ultimo_mensaje.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 
             string lineas_joineadas = op_tex.joineada_paraesida_SIN_NULOS_y_quitador_de_extremos_del_string(lineas_del_mensaje, "  ");
 
             bas.Agregar(G_dir_arch_transferencia[0], nombre_Del_que_envio_el_mensage + G_caracter_separacion_funciones_espesificas[1] + lineas_joineadas);
-
 
             Actions action = new Actions(manejadores);
             action.SendKeys(Keys.Escape).Perform();
@@ -475,10 +474,12 @@ namespace chatbot_wathsapp.clases
         {
 
             mandar_mensage_usuarios(manejadores, esperar, G_contactos_lista_para_mandar_informacion[5, 1], "ia_"+nombre_Del_que_envio_el_mensage + "\n" + texto_recibidos_arreglo + "\n--------------------------------------------------------------------");
+            Actions action = new Actions(manejadores);
+            action.SendKeys(Keys.Escape).Perform();
             mandar_mensage_usuarios(manejadores,esperar, nombre_Del_que_envio_el_mensage, texto_recibidos_arreglo);
 
 
-            Actions action = new Actions(manejadores);
+            action = new Actions(manejadores);
             action.SendKeys(Keys.Escape).Perform();
 
 
@@ -489,27 +490,28 @@ namespace chatbot_wathsapp.clases
             string nuevo_grupo = null;
             if (posicion < 4 && posicion > 0)
             {
-                string[] banderas = bas.Leer_inicial(G_direccion_de_banderas_transferencias);
-                int numero_grupo_ia = Convert.ToInt32(banderas[posicion]);
-                numero_grupo_ia = numero_grupo_ia + 3;
-                int numero_grupo_wat = Convert.ToInt32(banderas[posicion + 3]);
-
+                int numero_grupo_ia = 0;
+                int numero_grupo_wat = 0;
                 do
                 {
+                    string[] banderas = bas.Leer_inicial(G_direccion_de_banderas_transferencias);
+                    numero_grupo_ia = Convert.ToInt32(banderas[posicion + 3]);
+                    numero_grupo_ia = numero_grupo_ia + 3;
+                    numero_grupo_wat = Convert.ToInt32(banderas[posicion]);
 
                     if (numero_grupo_ia == numero_grupo_wat)
                     {
 
                     }
-                    else if (G_dir_arch_transferencia.Length + 1 <= numero_grupo_ia)
+                    else if (G_dir_arch_transferencia.Length < numero_grupo_ia)
                     {
-                        bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, posicion, posicion + "");
+                        bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, posicion + 3, posicion + "");
                         nuevo_grupo = posicion + "";
                     }
                     else
                     {
 
-                        bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, posicion, numero_grupo_ia + "");
+                        bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, posicion + 3, numero_grupo_ia + "");
                         nuevo_grupo = numero_grupo_ia + "";
                     }
                     Thread.Sleep(1000);
