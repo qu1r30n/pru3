@@ -200,20 +200,10 @@ namespace chatbot_wathsapp.clases
                         }
                         else
                         {
-                            string numero_archivo_a_leer = checar_numero_de_direccion_de_archivo_y_cambiar(2);
+
+                            datos_salida_y_borrado(manejadores, esperar);
 
 
-                            if (numero_archivo_a_leer != null)
-                            {
-                                int numero_archivo_a_leer_int = Convert.ToInt32(numero_archivo_a_leer);
-
-                                string[] respuestas_ia = bas.Leer_inicial(G_dir_arch_transferencia[numero_archivo_a_leer_int]);
-                                for (int i = G_donde_inicia_la_tabla; i < respuestas_ia.Length; i++)
-                                {
-                                    string[] res_espliteada = respuestas_ia[i].Split(G_caracter_separacion_funciones_espesificas[1][0]);
-                                    regresr_respuesta_ia(manejadores, esperar, res_espliteada[0], res_espliteada[1]);
-                                }
-                            }
                             Thread.Sleep(1000); // Puedes ajustar el tiempo de espera según tu escenario
                             return false;
                         }
@@ -240,14 +230,17 @@ namespace chatbot_wathsapp.clases
 
             string[] textos_recibidos_srting_arr = op_arr.convierte_objeto_a_arreglo(texto_recibidos_arreglo_objeto);
             string ultimo_mensaje = textos_recibidos_srting_arr[textos_recibidos_srting_arr.Length - 1].ToLower();//ultimo mensaje lo pone en minusculas
+
             mandar_mensage_usuarios(manejadores, esperar, G_contactos_lista_para_mandar_informacion[5, 1], nombre_Del_que_envio_el_mensage + "\n" + ultimo_mensaje + "\n--------------------------------------------------------------------");
-            
 
             string[] lineas_del_mensaje = ultimo_mensaje.Split(new string[] { "\r\n" }, StringSplitOptions.None);
 
             string lineas_joineadas = op_tex.joineada_paraesida_SIN_NULOS_y_quitador_de_extremos_del_string(lineas_del_mensaje, "  ");
 
-            bas.Agregar(G_dir_arch_transferencia[0], nombre_Del_que_envio_el_mensage + G_caracter_separacion_funciones_espesificas[1] + lineas_joineadas);
+            datos_entrada(nombre_Del_que_envio_el_mensage, lineas_joineadas);
+            
+            
+            
 
             Actions action = new Actions(manejadores);
             action.SendKeys(Keys.Escape).Perform();
@@ -473,10 +466,10 @@ namespace chatbot_wathsapp.clases
         private void regresr_respuesta_ia(IWebDriver manejadores, WebDriverWait esperar, string nombre_Del_que_envio_el_mensage, string texto_recibidos_arreglo)
         {
 
-            mandar_mensage_usuarios(manejadores, esperar, G_contactos_lista_para_mandar_informacion[5, 1], "ia_"+nombre_Del_que_envio_el_mensage + "\n" + texto_recibidos_arreglo + "\n--------------------------------------------------------------------");
+            mandar_mensage_usuarios(manejadores, esperar, G_contactos_lista_para_mandar_informacion[5, 1], "ia_" + nombre_Del_que_envio_el_mensage + "\n" + texto_recibidos_arreglo + "\n--------------------------------------------------------------------");
             Actions action = new Actions(manejadores);
             action.SendKeys(Keys.Escape).Perform();
-            mandar_mensage_usuarios(manejadores,esperar, nombre_Del_que_envio_el_mensage, texto_recibidos_arreglo);
+            mandar_mensage_usuarios(manejadores, esperar, nombre_Del_que_envio_el_mensage, texto_recibidos_arreglo);
 
 
             action = new Actions(manejadores);
@@ -485,41 +478,92 @@ namespace chatbot_wathsapp.clases
 
         }
 
-        public string checar_numero_de_direccion_de_archivo_y_cambiar(int posicion)
+        public int[] checar_numero_de_direccion_de_archivo_atras_actual_adelante(int posicion_bandera)
         {
-            string nuevo_grupo = null;
-            if (posicion < 4 && posicion > 0)
+            string[] banderas = bas.Leer_inicial(G_direccion_de_banderas_transferencias);
+
+
+
+            int numero_actual_posision = Convert.ToInt32(banderas[posicion_bandera]);
+            int numero_adelante_posision = numero_actual_posision + 3;
+            int numero_atras_posision = numero_actual_posision - 3;
+            int[] arr_devolver = { -1, -1, -1 };
+
+
+            if (G_dir_arch_transferencia.Length <= numero_adelante_posision)
             {
-                int numero_grupo_ia = 0;
-                int numero_grupo_wat = 0;
-                do
+                numero_adelante_posision = posicion_bandera;
+            }
+            if (1 > numero_actual_posision - 3)
+            {
+                numero_atras_posision = (G_dir_arch_transferencia.Length - 4) + posicion_bandera;
+            }
+            arr_devolver[0] = numero_atras_posision;
+            arr_devolver[1] = numero_actual_posision;
+            arr_devolver[2] = numero_adelante_posision;
+
+
+
+
+            return arr_devolver;
+
+        }
+
+
+
+        public void datos_entrada(string contacto,string mensage,string ia_ws="ws")
+        {
+            
+            
+
+            if (ia_ws == "ws")//agrega a archivos pregunta de la ia
+            {
+                int[] id_atras_actual_adelante_ia_1 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(1);//esta es de la ia
+                int[] id_atras_actual_adelante_ws_2 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(5);//este es del ws
+                if (id_atras_actual_adelante_ws_2[1] == id_atras_actual_adelante_ia_1[1])
                 {
-                    string[] banderas = bas.Leer_inicial(G_direccion_de_banderas_transferencias);
-                    numero_grupo_ia = Convert.ToInt32(banderas[posicion + 3]);
-                    numero_grupo_ia = numero_grupo_ia + 3;
-                    numero_grupo_wat = Convert.ToInt32(banderas[posicion]);
-
-                    if (numero_grupo_ia == numero_grupo_wat)
-                    {
-
-                    }
-                    else if (G_dir_arch_transferencia.Length < numero_grupo_ia)
-                    {
-                        bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, posicion + 3, posicion + "");
-                        nuevo_grupo = posicion + "";
-                    }
-                    else
-                    {
-
-                        bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, posicion + 3, numero_grupo_ia + "");
-                        nuevo_grupo = numero_grupo_ia + "";
-                    }
-                    Thread.Sleep(1000);
-                } while (numero_grupo_ia == numero_grupo_wat);
+                    bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[2]], contacto + G_caracter_separacion_funciones_espesificas[1] + mensage);
+                    bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, 5, (id_atras_actual_adelante_ws_2[2] + 3) + "");
+                }
+                else
+                {
+                    bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[1]], contacto + G_caracter_separacion_funciones_espesificas[1] + mensage);
+                }
+                
 
             }
-            return nuevo_grupo;
+            
+
+
+        }
+        public void datos_salida_y_borrado(IWebDriver manejadores, WebDriverWait esperar, string ia_ws = "ws")
+        {
+            int[] id_atras_actual_adelante_1 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(2);//esta es de la ia
+            int[] id_atras_actual_adelante_2 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(5);//este es del ws
+
+            if (ia_ws == "ws")//envia info de archivos respuesta y elimina la informacion
+            {
+                if (id_atras_actual_adelante_1[1] == id_atras_actual_adelante_2[1])
+                {
+
+                }
+                else
+                {
+                    string[] respuestas_ia = bas.Leer_inicial(G_dir_arch_transferencia[id_atras_actual_adelante_2[1]]);
+                    for (int i = G_donde_inicia_la_tabla; i < respuestas_ia.Length; i++)
+                    {
+                        string[] res_espliteada = respuestas_ia[i].Split(G_caracter_separacion_funciones_espesificas[1][0]);
+                        regresr_respuesta_ia(manejadores, esperar, res_espliteada[0], res_espliteada[1]);
+                    }
+
+                    bas.cambiar_archivo_con_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_2[1]], new string[] { "sin_informacion" });
+                    bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, 5, id_atras_actual_adelante_2[2] + "");
+                }
+
+                
+            }
         }
 
     }
+
 }

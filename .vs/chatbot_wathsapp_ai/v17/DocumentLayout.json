@@ -22,7 +22,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
@@ -32,9 +32,22 @@
               "RelativeDocumentMoniker": "chatbot_wathsapp\\clases\\herramientas\\Tex_base.cs",
               "ToolTip": "C:\\Users\\pc1\\Documents\\GitHub\\pru3\\chatbot_wathsapp\\clases\\herramientas\\Tex_base.cs",
               "RelativeToolTip": "chatbot_wathsapp\\clases\\herramientas\\Tex_base.cs",
-              "ViewState": "AQIAAHYAAAAAAAAAAAD4v4EAAAAIAAAA",
+              "ViewState": "AQIAALoBAAAAAAAAAAD4v8UBAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-03T19:19:23.453Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "chatbot_clase.cs",
+              "DocumentMoniker": "C:\\Users\\pc1\\Documents\\GitHub\\pru3\\chatbot_wathsapp\\clases\\chatbot_clase.cs",
+              "RelativeDocumentMoniker": "chatbot_wathsapp\\clases\\chatbot_clase.cs",
+              "ToolTip": "C:\\Users\\pc1\\Documents\\GitHub\\pru3\\chatbot_wathsapp\\clases\\chatbot_clase.cs",
+              "RelativeToolTip": "chatbot_wathsapp\\clases\\chatbot_clase.cs",
+              "ViewState": "AQIAAJYAAAAAAAAAAAAtwKEAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-30T14:58:42.118Z",
               "EditorCaption": ""
             },
             {
@@ -48,19 +61,6 @@
               "ViewState": "AQIAAF0AAAAAAAAAAAAAAGYAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-30T18:19:05.615Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "chatbot_clase.cs",
-              "DocumentMoniker": "C:\\Users\\pc1\\Documents\\GitHub\\pru3\\chatbot_wathsapp\\clases\\chatbot_clase.cs",
-              "RelativeDocumentMoniker": "chatbot_wathsapp\\clases\\chatbot_clase.cs",
-              "ToolTip": "C:\\Users\\pc1\\Documents\\GitHub\\pru3\\chatbot_wathsapp\\clases\\chatbot_clase.cs",
-              "RelativeToolTip": "chatbot_wathsapp\\clases\\chatbot_clase.cs",
-              "ViewState": "AQIAAKYAAAAAAAAAAAD4v7MAAAAcAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-30T14:58:42.118Z",
-              "EditorCaption": ""
             }
           ]
         }
