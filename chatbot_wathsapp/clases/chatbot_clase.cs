@@ -492,7 +492,18 @@ namespace chatbot_wathsapp.clases
 
             if (G_dir_arch_transferencia.Length <= numero_adelante_posision)
             {
-                numero_adelante_posision = posicion_bandera;
+                if (numero_adelante_posision<3)
+                {
+                    numero_adelante_posision = posicion_bandera;
+                }
+                else
+                {
+                    numero_adelante_posision = posicion_bandera;
+                    while (numero_adelante_posision>3)
+                    {
+                        numero_adelante_posision = numero_adelante_posision - 3;
+                    }
+                }
             }
             if (1 > numero_actual_posision - 3)
             {
