@@ -1,4 +1,6 @@
 nombre_del_producto|precio
-producto1|1
-producto2|2
-producto3|3
+estos son los productos
+1)pollo a la kentoky
+2)pechuga rellena
+3)pollo en salsa de queso
+4)bisteck a la mexicana

@@ -175,24 +175,22 @@ namespace chatbot_wathsapp.clases
                         {
                             // Si el elemento está presente, retorna verdadero
                             //clickea
-                            manejadores.FindElement(By.XPath(elementos_clase)).Click();//clickea el elemento del no leido
-                            string[] textosDelMensaje = leer_mensages_recibidos_del_mensage_clickeado(manejadores, esperar);
-                            string nom_del_click = nombre_del_clickeado(manejadores, esperar);
-
-                            //fin mensaje que resibio--------------------------------------------------------------
-
-                            Thread.Sleep(1000);
                             try
                             {
+                                manejadores.FindElement(By.XPath(elementos_clase)).Click();//clickea el elemento del no leido
+                               string[] textosDelMensaje = leer_mensages_recibidos_del_mensage_clickeado(manejadores, esperar);
+                                string nom_del_click = nombre_del_clickeado(manejadores, esperar);
+                                //fin mensaje que resibio--------------------------------------------------------------
 
-
+                                Thread.Sleep(1000);
                                 modelo_para_mandar_mensage_archivo_ia(manejadores, esperar, nom_del_click, textosDelMensaje);
-
                             }
                             catch
                             {
-                            }
 
+                                
+                            }
+                            
 
                             Thread.Sleep(1000);
 
@@ -238,9 +236,9 @@ namespace chatbot_wathsapp.clases
             string lineas_joineadas = op_tex.joineada_paraesida_SIN_NULOS_y_quitador_de_extremos_del_string(lineas_del_mensaje, "  ");
 
             datos_entrada(nombre_Del_que_envio_el_mensage, lineas_joineadas);
-            
-            
-            
+
+
+
 
             Actions action = new Actions(manejadores);
             action.SendKeys(Keys.Escape).Perform();
@@ -492,14 +490,14 @@ namespace chatbot_wathsapp.clases
 
             if (G_dir_arch_transferencia.Length <= numero_adelante_posision)
             {
-                if (numero_adelante_posision<3)
+                if (numero_adelante_posision < 3)
                 {
                     numero_adelante_posision = posicion_bandera;
                 }
                 else
                 {
                     numero_adelante_posision = posicion_bandera;
-                    while (numero_adelante_posision>3)
+                    while (numero_adelante_posision > 3)
                     {
                         numero_adelante_posision = numero_adelante_posision - 3;
                     }
@@ -521,28 +519,47 @@ namespace chatbot_wathsapp.clases
         }
 
 
-        public void datos_entrada(string contacto,string mensage,string ia_ws="ws")
+        public void datos_entrada(string contacto, string mensage, string ia_ws = "ws")
         {
-            
-            
+            int[] id_atras_actual_adelante_ia_1 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(1);//esta es de la ia
+            int[] id_atras_actual_adelante_ws_2 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(4);//este es del ws
 
             if (ia_ws == "ws")//agrega a archivos pregunta de la ia
             {
-                int[] id_atras_actual_adelante_ia_1 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(1);//esta es de la ia
-                int[] id_atras_actual_adelante_ws_2 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(4);//este es del ws
+
+                recargar_arreglos();
+
+                string mensage1 = "";
+                string mensage2 = "";
+                string mensage3 = "";
+                string contacto_solo_los_ultimos_digitos = contacto[contacto.Length - 4] + "" + contacto[contacto.Length - 3] + "" + contacto[contacto.Length - 2] + "" + contacto[contacto.Length - 1];
+                for (int i = G_donde_inicia_la_tabla; i < Tex_base.GG_base_arreglo_de_arreglos[13].Length; i++)
+                {
+                    mensage1 = op_tex.concatenacion_caracter_separacion(mensage1, Tex_base.GG_base_arreglo_de_arreglos[13][i], "           ");
+                }
+                for (int i = G_donde_inicia_la_tabla; i < Tex_base.GG_base_arreglo_de_arreglos[14].Length; i++)
+                {
+                    mensage2 = op_tex.concatenacion_caracter_separacion(mensage2, Tex_base.GG_base_arreglo_de_arreglos[14][i], "           ");
+                }
+
+                for (int i = G_donde_inicia_la_tabla; i < Tex_base.GG_base_arreglo_de_arreglos[15].Length; i++)
+                {
+                    mensage3 = op_tex.concatenacion_caracter_separacion(mensage3, Tex_base.GG_base_arreglo_de_arreglos[15][i], "           ");
+                }
+
                 if (id_atras_actual_adelante_ws_2[1] == id_atras_actual_adelante_ia_1[1] || id_atras_actual_adelante_ws_2[0] == id_atras_actual_adelante_ia_1[1])
                 {
-                    bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[2]], contacto + G_caracter_separacion_funciones_espesificas[1] + mensage);
+                    bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[2]], contacto + G_caracter_separacion_funciones_espesificas[1] + mensage1 + "      menu:" + mensage3 + "      " + mensage2 + "        pedido:hola soy" + contacto_solo_los_ultimos_digitos + mensage);
                     bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, 4, (id_atras_actual_adelante_ws_2[2]) + "");
                 }
                 else
                 {
-                    bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[1]], contacto + G_caracter_separacion_funciones_espesificas[1] + mensage);
+                    bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[1]], contacto + G_caracter_separacion_funciones_espesificas[1] + mensage1 + "      menu:" + mensage3 + "      " + mensage2 + "        pedido:hola soy" + contacto_solo_los_ultimos_digitos + mensage);
                 }
-                
+
 
             }
-            
+
 
 
         }
@@ -551,29 +568,95 @@ namespace chatbot_wathsapp.clases
             int[] id_atras_actual_adelante_1 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(2);//esta es de la ia
             int[] id_atras_actual_adelante_2 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(5);//este es del ws
 
+            int[] id_atras_actual_adelante_pedido_1 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(3);//esta es de la ia
+            int[] id_atras_actual_adelante_pedido_2 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(6);//este es del ws
+
             if (ia_ws == "ws")//envia info de archivos respuesta y elimina la informacion
             {
                 if (id_atras_actual_adelante_1[1] == id_atras_actual_adelante_2[1])
                 {
+                    string[] respuestas_ia = bas.Leer_inicial(G_dir_arch_transferencia[id_atras_actual_adelante_2[1]]);
+                    if (respuestas_ia.Length > 1)
+                    {
 
+
+                        for (int i = G_donde_inicia_la_tabla; i < respuestas_ia.Length; i++)
+                        {
+                            string[] res_espliteada = respuestas_ia[i].Split(G_caracter_separacion_funciones_espesificas[1][0]);
+                            regresr_respuesta_ia(manejadores, esperar, res_espliteada[0], res_espliteada[1]);
+                        }
+
+                        bas.cambiar_archivo_con_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_2[1]], new string[] { "sin_informacion" });
+                    }
                 }
                 else
                 {
                     string[] respuestas_ia = bas.Leer_inicial(G_dir_arch_transferencia[id_atras_actual_adelante_2[1]]);
+                    if (respuestas_ia.Length > 1)
+                    {
+                        for (int i = G_donde_inicia_la_tabla; i < respuestas_ia.Length; i++)
+                        {
+                            string[] res_espliteada = respuestas_ia[i].Split(G_caracter_separacion_funciones_espesificas[1][0]);
+                            regresr_respuesta_ia(manejadores, esperar, res_espliteada[0], res_espliteada[1]);
+                        }
+
+                        bas.cambiar_archivo_con_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_2[1]], new string[] { "sin_informacion" });
+                    }
+                    bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, 5, id_atras_actual_adelante_2[2] + "");
+                }
+                /*
+                //pedidos
+                if (id_atras_actual_adelante_pedido_1[1] == id_atras_actual_adelante_pedido_2[1])
+                {
+                    string[] respuestas_ia = bas.Leer_inicial(G_dir_arch_transferencia[id_atras_actual_adelante_pedido_2[1]]);
                     for (int i = G_donde_inicia_la_tabla; i < respuestas_ia.Length; i++)
                     {
                         string[] res_espliteada = respuestas_ia[i].Split(G_caracter_separacion_funciones_espesificas[1][0]);
                         regresr_respuesta_ia(manejadores, esperar, res_espliteada[0], res_espliteada[1]);
                     }
 
-                    bas.cambiar_archivo_con_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_2[1]], new string[] { "sin_informacion" });
-                    bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, 5, id_atras_actual_adelante_2[2] + "");
-                    
+                    bas.cambiar_archivo_con_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_pedido_2[1]], new string[] { "sin_informacion" });
                 }
+                else
+                {
+                    string[] respuestas_ia = bas.Leer_inicial(G_dir_arch_transferencia[id_atras_actual_adelante_pedido_2[1]]);
+                    for (int i = G_donde_inicia_la_tabla; i < respuestas_ia.Length; i++)
+                    {
+                        string[] res_espliteada = respuestas_ia[i].Split(G_caracter_separacion_funciones_espesificas[1][0]);
+                        regresr_respuesta_ia(manejadores, esperar, res_espliteada[0], res_espliteada[1]);
+                    }
 
-                
+                    bas.cambiar_archivo_con_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_pedido_2[1]], new string[] { "sin_informacion" });
+                    bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, 6, id_atras_actual_adelante_pedido_2[2] + "");
+
+                }
+                */
+
             }
+
         }
+
+
+
+        public void recargar_arreglos()
+        {
+            string[] chequeo = bas.Leer_inicial(G_dir_para_registros_y_configuraciones[3, 0]);
+            if (chequeo.Length > G_donde_inicia_la_tabla)
+            {
+                if (chequeo[G_donde_inicia_la_tabla] == "1")
+                {
+                    for (int i = 0; i < G_dir_arch_mensages.Length; i++)
+                    {
+                        int indice_de_arreglo_de_arreglos = Convert.ToInt32(bas.sacar_indice_del_arreglo_de_direccion(G_dir_arch_mensages[i]));
+                        Tex_base.GG_base_arreglo_de_arreglos[indice_de_arreglo_de_arreglos] = bas.Leer_inicial(G_dir_arch_mensages[i]);
+                    }
+
+                }
+            }
+
+
+        }
+
 
     }
 

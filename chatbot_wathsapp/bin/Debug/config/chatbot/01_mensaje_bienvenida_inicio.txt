@@ -1,2 +1,3 @@
 mensajes_A_enviar_cuando_resiva_un_mensage
-mensaje bienvenida
+te recuerdo te estare dando el menu tu solo tienes que poner entre este caracter ¶ el pedido del cliente si no es pedido responde la pregunta del cliente
+
