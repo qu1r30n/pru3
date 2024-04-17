@@ -251,11 +251,34 @@ namespace chatbot_wathsapp.clases
             Actions action = new Actions(manejadores);
             action.SendKeys(Keys.Escape).Perform();
 
+            //buscamos persona en el buscador de personas
+            //aqui hacemos que reconosca la barra de texto y escriba
+
+            string lugar_a_escribir = G_info_de_configuracion_chatbot[5][2];
+            //var escribir_msg = G_esperar2.Until(manej => manej.FindElement(By.XPath(lugar_a_escribir)));
+            var escribir_msg = esperar.Until(manej => manej.FindElement(By.XPath(lugar_a_escribir)));
+
+            escribir_msg.SendKeys(nombre_o_numero);
+            escribir_msg.SendKeys(Keys.Enter);
+
+
+            /* lla funciona con el enter que se le da en busqueda asi que no es nesesario
+            //damos click
             IWebDriver manejadores_de_busqueda = manejadores;
             //ReadOnlyCollection<IWebElement> elementos = manejadores_de_busqueda.FindElements(By.XPath("//span[contains(@title, 'Jorge')]"));
-            IWebElement elemento = manejadores_de_busqueda.FindElement(By.XPath(G_info_de_configuracion_chatbot[6][1] + nombre_o_numero + "')]"));
+            string buscar_elemento = G_info_de_configuracion_chatbot[6][1] + nombre_o_numero + "')]";
+            IWebElement elemento = manejadores_de_busqueda.FindElement(By.XPath(buscar_elemento));
             string a = elemento.Text;
             elemento.Click();
+            */
+
+            //limpiamos_lo_que_se_puso_en_el_buscador_de_contactos
+            escribir_msg.Click(); // Enfocar el elemento
+            for (int i = 0; i < nombre_o_numero.Length; i++)
+            {
+                escribir_msg.SendKeys(Keys.Backspace); // Borrar el contenido del textbox
+            }
+
 
         }
 
@@ -532,7 +555,12 @@ namespace chatbot_wathsapp.clases
                 string mensage1 = "";
                 string mensage2 = "";
                 string mensage3 = "";
-                string contacto_solo_los_ultimos_digitos = contacto[contacto.Length - 4] + "" + contacto[contacto.Length - 3] + "" + contacto[contacto.Length - 2] + "" + contacto[contacto.Length - 1];
+                string contacto_solo_los_ultimos_digitos = "";
+                for (int i = 0; i < 4 && i < contacto.Length; i++)
+                {
+                    contacto_solo_los_ultimos_digitos = contacto[contacto.Length - i] + "" + contacto_solo_los_ultimos_digitos;
+                }
+
                 for (int i = G_donde_inicia_la_tabla; i < Tex_base.GG_base_arreglo_de_arreglos[13].Length; i++)
                 {
                     mensage1 = op_tex.concatenacion_caracter_separacion(mensage1, Tex_base.GG_base_arreglo_de_arreglos[13][i], "           ");
