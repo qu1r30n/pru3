@@ -15,7 +15,7 @@ using System.Threading;
 
 using chatbot_wathsapp.clases.herramientas;
 using OpenQA.Selenium.Interactions;
-using Microsoft.SqlServer.Server;
+using System.Diagnostics.Contracts;
 
 
 
@@ -158,13 +158,22 @@ namespace chatbot_wathsapp.clases
 
             //------------------------------------------------------------------------------------------
 
-
+            long añomesdiahoramin_ant = 0;
+            bool anteriro_fue_recordatorio = false;
             while (true)
             {
                 try
                 {
+                    
+                    long añomesdiahoramin_actual = Convert.ToInt64(DateTime.Now.ToString("yyyyMMddHHmm"));
+                    //va a mandar un recordatorio cada 10 minutos siempre y cuando el anterior mensaje no sea otro recordatorio
+                    if (añomesdiahoramin_actual >= añomesdiahoramin_ant + 10 && anteriro_fue_recordatorio == false)
+                    {
+                        añomesdiahoramin_ant = añomesdiahoramin_actual;
+                        //recordatorio_a_ia();
+                        anteriro_fue_recordatorio = true;
 
-
+                    }
                     //checa si estan los elementos  esto sustitulle al // esperar.Until(manej => manej.FindElement(By.XPath(elementos)));//busca el elemento del no leido
                     //porque siempre marcaba error
                     bool elementoEncontrado = false;
@@ -173,6 +182,7 @@ namespace chatbot_wathsapp.clases
                         var cuantos_elementos = manej.FindElements(By.XPath(elementos));
                         if (cuantos_elementos.Count > 0)
                         {
+                            anteriro_fue_recordatorio = false;
                             // Si el elemento está presente, retorna verdadero
                             //clickea
                             try
@@ -180,10 +190,31 @@ namespace chatbot_wathsapp.clases
                                 manejadores.FindElement(By.XPath(elementos_clase)).Click();//clickea el elemento del no leido
                                string[] textosDelMensaje = leer_mensages_recibidos_del_mensage_clickeado(manejadores, esperar);
                                 string nom_del_click = nombre_del_clickeado(manejadores, esperar);
-                                //fin mensaje que resibio--------------------------------------------------------------
 
-                                Thread.Sleep(1000);
-                                modelo_para_mandar_mensage_archivo_ia(manejadores, esperar, nom_del_click, textosDelMensaje);
+                                //la comparacion con registro o vendedores es temporal por que se deve extraer del archivo de usuarios pero para rapido
+                                if (nom_del_click != "Reg_mensaje" && nom_del_click != "Vendedores")
+                                {
+                                    //fin mensaje que resibio--------------------------------------------------------------
+                                    string[] bandera_ia = bas.Leer_inicial(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "config\\chatbot\\banderas.txt");
+
+                                    do
+                                    {
+                                        
+
+                                        if (bandera_ia[1] == "0")
+                                        {
+                                            bas.Editar_fila_espesifica_SIN_ARREGLO_GG(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "config\\chatbot\\banderas.txt", 1, "1");
+                                            modelo_para_mandar_mensage_archivo_ia(manejadores, esperar, nom_del_click, textosDelMensaje);
+
+                                        }
+                                        else
+                                        {
+                                            bandera_ia = bas.Leer_inicial(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "config\\chatbot\\banderas.txt");
+                                        }
+                                        
+                                        
+                                    } while (bandera_ia[1] == "1");
+                                }
                             }
                             catch
                             {
@@ -225,10 +256,10 @@ namespace chatbot_wathsapp.clases
 
         private void modelo_para_mandar_mensage_archivo_ia(IWebDriver manejadores, WebDriverWait esperar, string nombre_Del_que_envio_el_mensage, object texto_recibidos_arreglo_objeto)
         {
-
+            mandar_mensage(esperar, "estas hablando con una ia puede que cometa errores y tambien tarda un poquito en responder estaremos mejorando el sistema no te desesperes\n si nesesitas ayuda manda un watsap a este numero 748 100 5674 con gusto te apoyare");
             string[] textos_recibidos_srting_arr = op_arr.convierte_objeto_a_arreglo(texto_recibidos_arreglo_objeto);
             string ultimo_mensaje = textos_recibidos_srting_arr[textos_recibidos_srting_arr.Length - 1].ToLower();//ultimo mensaje lo pone en minusculas
-
+            
             mandar_mensage_usuarios(manejadores, esperar, G_contactos_lista_para_mandar_informacion[5, 1], nombre_Del_que_envio_el_mensage + "\n" + ultimo_mensaje + "\n--------------------------------------------------------------------");
 
             string[] lineas_del_mensaje = ultimo_mensaje.Split(new string[] { "\r\n" }, StringSplitOptions.None);
@@ -240,8 +271,11 @@ namespace chatbot_wathsapp.clases
 
 
 
+
+
             Actions action = new Actions(manejadores);
             action.SendKeys(Keys.Escape).Perform();
+
 
 
         }
@@ -552,37 +586,26 @@ namespace chatbot_wathsapp.clases
 
                 recargar_arreglos();
 
-                string mensage1 = "";
-                string mensage2 = "";
-                string mensage3 = "";
+                
                 string contacto_solo_los_ultimos_digitos = "";
                 for (int i = 0; i < 4 && i < contacto.Length; i++)
                 {
-                    contacto_solo_los_ultimos_digitos = contacto[(contacto.Length - 1) - i] + "" + contacto_solo_los_ultimos_digitos;
+                    contacto_solo_los_ultimos_digitos = contacto_solo_los_ultimos_digitos + contacto[i];
                 }
 
-                for (int i = G_donde_inicia_la_tabla; i < Tex_base.GG_base_arreglo_de_arreglos[13].Length; i++)
-                {
-                    mensage1 = op_tex.concatenacion_caracter_separacion(mensage1, Tex_base.GG_base_arreglo_de_arreglos[13][i], "           ");
-                }
-                for (int i = G_donde_inicia_la_tabla; i < Tex_base.GG_base_arreglo_de_arreglos[14].Length; i++)
-                {
-                    mensage2 = op_tex.concatenacion_caracter_separacion(mensage2, Tex_base.GG_base_arreglo_de_arreglos[14][i], "           ");
-                }
-
-                for (int i = G_donde_inicia_la_tabla; i < Tex_base.GG_base_arreglo_de_arreglos[15].Length; i++)
-                {
-                    mensage3 = op_tex.concatenacion_caracter_separacion(mensage3, Tex_base.GG_base_arreglo_de_arreglos[15][i], "           ");
-                }
+                
 
                 if (id_atras_actual_adelante_ws_2[1] == id_atras_actual_adelante_ia_1[1] || id_atras_actual_adelante_ws_2[0] == id_atras_actual_adelante_ia_1[1])
                 {
-                    bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[2]], contacto + G_caracter_separacion_funciones_espesificas[1] + mensage1 + "      menu:" + mensage3 + "      " + mensage2 + "        cliente: hola soy: " + contacto_solo_los_ultimos_digitos+" " + mensage);
+                    
+                    //bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[2]], contacto + G_caracter_separacion_funciones_espesificas[1] + mensage1 + "      menu:" + mensage3 + "      " + mensage2 + "        cliente: hola soy: " + contacto_solo_los_ultimos_digitos + " " + mensage);
+                    bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[2]], contacto + G_caracter_separacion_funciones_espesificas[1] + "soy " + contacto_solo_los_ultimos_digitos + ": " + mensage);
                     bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, 4, (id_atras_actual_adelante_ws_2[2]) + "");
                 }
                 else
                 {
-                    bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[1]], contacto + G_caracter_separacion_funciones_espesificas[1] + mensage1 + "      menu:" + mensage3 + "      " + mensage2 + "        cliente:  hola soy: " + contacto_solo_los_ultimos_digitos + " " + mensage);
+                    //bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[1]], contacto + G_caracter_separacion_funciones_espesificas[1] + mensage1 + "      menu:" + mensage3 + "      " + mensage2 + "hola soy " + contacto_solo_los_ultimos_digitos + ": " + mensage);
+                    bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[1]], contacto + G_caracter_separacion_funciones_espesificas[1] + "hola soy " + contacto_solo_los_ultimos_digitos + ": " + mensage);
                 }
 
 
@@ -690,6 +713,43 @@ namespace chatbot_wathsapp.clases
                 }
             }
 
+
+        }
+
+        public void recordatorio_a_ia()
+        {
+            int[] id_atras_actual_adelante_ia_1 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(1);//esta es de la ia
+            int[] id_atras_actual_adelante_ws_2 = checar_numero_de_direccion_de_archivo_atras_actual_adelante(4);//este es del ws
+            
+            string mensage1 = "";
+            string mensage2 = "";
+            string mensage3 = "";
+            for (int i = G_donde_inicia_la_tabla; i < Tex_base.GG_base_arreglo_de_arreglos[13].Length; i++)
+            {
+                mensage1 = op_tex.concatenacion_caracter_separacion(mensage1, Tex_base.GG_base_arreglo_de_arreglos[13][i], "           ");
+            }
+            for (int i = G_donde_inicia_la_tabla; i < Tex_base.GG_base_arreglo_de_arreglos[14].Length; i++)
+            {
+                mensage2 = op_tex.concatenacion_caracter_separacion(mensage2, Tex_base.GG_base_arreglo_de_arreglos[14][i], "           ");
+            }
+
+            for (int i = G_donde_inicia_la_tabla; i < Tex_base.GG_base_arreglo_de_arreglos[15].Length; i++)
+            {
+                mensage3 = op_tex.concatenacion_caracter_separacion(mensage3, Tex_base.GG_base_arreglo_de_arreglos[15][i], "           ");
+            }
+
+            if (id_atras_actual_adelante_ws_2[1] == id_atras_actual_adelante_ia_1[1] || id_atras_actual_adelante_ws_2[0] == id_atras_actual_adelante_ia_1[1])
+            {
+
+                //bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[2]], contacto + G_caracter_separacion_funciones_espesificas[1] + mensage1 + "      menu:" + mensage3 + "      " + mensage2 + "        cliente: hola soy: " + contacto_solo_los_ultimos_digitos + " " + mensage);
+                bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[2]], "Reg_mensaje" + G_caracter_separacion_funciones_espesificas[1] + mensage1 + " " + mensage2 + " " + mensage3);
+                bas.Editar_fila_espesifica_SIN_ARREGLO_GG(G_direccion_de_banderas_transferencias, 4, (id_atras_actual_adelante_ws_2[2]) + "");
+            }
+            else
+            {
+                //bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[1]], contacto + G_caracter_separacion_funciones_espesificas[1] + mensage1 + "      menu:" + mensage3 + "      " + mensage2 + "hola soy " + contacto_solo_los_ultimos_digitos + ": " + mensage);
+                bas.Agregar_a_archivo_sin_arreglo(G_dir_arch_transferencia[id_atras_actual_adelante_ws_2[1]], "Reg_mensaje" + G_caracter_separacion_funciones_espesificas[1] + mensage1 + " " + mensage2 + " " + mensage3);
+            }
 
         }
 

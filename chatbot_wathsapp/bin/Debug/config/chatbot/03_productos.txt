@@ -1,6 +1,25 @@
 nombre_del_producto|precio
 estos son los productos
-1)pollo a la kentoky
-2)pechuga rellena
-3)pollo en salsa de queso
-4)bisteck a la mexicana
+1)comida corrida pechuga rellena Precio: $75
+2)comida corrida bistec a la mexicanaPrecio: $75
+3)comida corrida pechuga asadaPrecio: $75
+4)desayuno tarde club sanwichPrecio: $50
+5)desayuno huevo a la mexicanaPrecio: $40
+6)desayuno huevo rancheroPrecio: $35
+7)desayuno huevo motuleñoPrecio: $50
+8)desayuno huevo estrelladoPrecio: $30
+9)desayuno omeletPrecio: $40
+10)desayuno huevo divorciadosPrecio: $50
+11)tarde pechuga empanizadaPrecio: $50
+12)desayuno chilaquilesPrecio: $50
+13)desayuno enchiladas suisasPrecio: $50
+14)desayuno enmoladasPrecio: $50
+15)desayuno tacos doradosPrecio: $40
+16)desayuno hotcakesPrecio: $40
+17)desayuno sincronisadasPrecio: $40
+18)desayuno molletesPrecio: $50
+19)tarde torta bistekPrecio: $35
+21)desayuno coctel de frutasPrecio: $50
+22)desayuno cafePrecio: $10
+23)desayuno cafe con lechePrecio: $20
+24)desayuno jugo de naranjaPrecio: $28

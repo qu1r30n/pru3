@@ -69,6 +69,7 @@ namespace chatbot_wathsapp.clases
                 /*33*/ "config\\chatbot\\registros\\pedidos\\pedidos_con_horario.txt~horar|recordatorio|dias~",
                 /*33*/ "config\\chatbot\\registros\\rut\\rutas_clientes.txt~horar|recordatorio|dias~",
                 /*34*/ "config\\chatbot\\13_cocina_fonda.txt~nombre_o_numero_de_telefono_que_aparece_en_el_watsap~Cocina_Fonda",
+                
             };
             
             bas.Crear_archivo_y_directorio_opcion_leer_y_agrega_arreglo(direccion_archivo_de_direcciones_de_bd, fila_inicial, agregar_filas, caracter_separacion_fun_esp_objeto: G_separador_para_funciones_espesificas_[2]);
@@ -94,6 +95,7 @@ namespace chatbot_wathsapp.clases
             bas.Crear_archivo_y_directorio_opcion_leer_y_agrega_arreglo(chatbot.G_dir_para_registros_y_configuraciones[2,0], "id_usuario|venta");
             bas.Crear_archivo_y_directorio_opcion_leer_y_agrega_arreglo(chatbot.G_dir_para_registros_y_configuraciones[1,0], "folio_venta|añomesdiahoraminutosegundo|total|operacion|producto1¬precio1°pedido2¬precio2|vendedor|num_celular_vendedor|repartidor|datos_comprador°datos_comprador|datos_extra1°dato_extra2");
 
+            bas.Crear_archivo_y_directorio_opcion_leer_y_agrega_arreglo(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "config\\chatbot\\banderas.txt","0_puede_enviar_mensaje_1_espera_a_que_se_desocupe_ia",new string[] {"0"},leer_y_agrega_al_arreglo:false);
 
             //entrada_salida_y_pedido
             for (int i = 0; i < chatbot.G_dir_arch_transferencia.Length; i++)
